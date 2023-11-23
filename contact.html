@@ -85,12 +85,12 @@
             <div class="col-xl-5 scale-animation" data-duration="2">
               <div class="contact-info email">
                 <p class="little-p info-title">Write me</p>
-                <a href="mailto:hello@mosbycreative.com">hello@mosbycreative.com</a>
+                <a href="mailto:hello@mosbycreative.com">brunotsane@gmail.com</a>
               </div>
               <div class="contact-info address">
                 <p class="little-p info-title">My office</p>
-                <p>1444 S. Alameda Street Los Angeles, <br> 
-                    California 90021</p>
+                <p>534 Recolte Private, <br> 
+                    K1E 0B5</p>
               </div>
               <div class="contact-info social">
                 <p class="little-p info-title">Follow us</p>
@@ -112,11 +112,11 @@
                     <!-- name -->
                     <div class="col-xl-12 contact-bar">
                       <input type="text" style="display:none" />
-                      <input class="inp" name="name" type="text" placeholder="Name" id="name" >
+                      <input class="inp" name="name" type="text" placeholder="Name" id="name" required>
                     </div>
                     <!-- email -->
                     <div class="col-xl-12 contact-bar">
-                      <input class="inp" name="email" type="text"  placeholder="Email" id="email"  >
+                      <input class="inp" name="email" type="text"  id="email" pattern="[^ @]*@[^ @]*" placeholder="Enter your email" required  >
                   </div>
                   <!-- company -->
                   <div class="col-xl-12 contact-bar">
@@ -128,7 +128,7 @@
                     </div>
                     <!-- button -->
                     <div class="form-btn col-xl-12 contact-bar">
-                      <input class="site-btn" type="submit" value="Send">
+                      <input class="site-btn" type="submit" value="Send" onsubmit="reserve()">
                     </div>
                   </form>
                 </div>
@@ -149,7 +149,7 @@
                     <div class="container">
             <div class="footer-inner">
               <div class="copyright">
-                <p>Copyright 2022 - All right reserved</p>
+                <p>Copyright 2023 - All right reserved</p>
               </div>
               <ul class="social">
                 <li><a target="_blank" href="#">Facebook</a></li>
@@ -170,8 +170,65 @@
 <script src="js/jquery.js"></script>
 <script src="js/plugins.js"></script>
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB3gqyHylICdokv-P1q2WtRihCFhiFnm_U&sensor=false"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-database.js"></script>
 <script src="js/map.js"></script>
 <script src="js/main.js"></script>
+
+<script>
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyAd6bVUA5EpSimGGctbnAYrQDDVWxHW1Es",
+    authDomain: "famille-tsane.firebaseapp.com",
+    projectId: "famille-tsane",
+    storageBucket: "famille-tsane.appspot.com",
+    messagingSenderId: "842852246678",
+    appId: "1:842852246678:web:365e5f3531a72922f28eb7",
+    measurementId: "G-FNG30FYSNJ"
+  };
+
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+
+  function reserve() {
+    var userName = document.getElementById('name').value;
+    var email = document.getElementById('email').value;
+    var company = document.getElementById('company').value;
+    var message = document.getElementById('comments').value;
+
+    // Get a reference to the database service
+    var database = firebase.database();
+
+    // Reference to your storage location in Database
+    var myRef = database.ref('messages');
+
+    // Create new reservation data
+    var newReservationRef = myRef.push();
+
+    // Write new reservation data
+    newReservationRef.set({
+        name: userName,
+        company: company,
+        email: email,
+        message: message,
+        timestamp: firebase.database.ServerValue.TIMESTAMP,
+        // Other reservation data...
+    }).then(function() {
+        alert('Reservation successful!');
+        // Clear the input fields after successful reservation
+        name="";
+        email="";
+        company="";
+        message="";
+    }).catch(function(error) {
+        console.log('Error writing new message to database:', error);
+    });
+}
+</script>
 
 </body>
 </html>
